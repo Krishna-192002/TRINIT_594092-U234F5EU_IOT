@@ -1,0 +1,61 @@
+// circuit
+
+int pwmPin = 12; // assigns pin 12 to variable pwm
+
+int pot = A0; // assigns analog input A0 to variable pot
+
+int c1 = 0;   // declares variable c1
+
+int c2 = 0;   // declares variable c2
+
+const int trigPin = 9;
+const int echoPin = 8;
+long duration;
+int distanceCm, distanceInch;
+
+int brake = 0;
+void setup()  // setup loop
+
+{
+
+  pinMode(pwmPin, OUTPUT); 
+
+  pinMode(pot, INPUT); 
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(9600);
+
+}
+
+
+void loop()
+
+{
+
+   
+  
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  distanceCm= duration*0.034/2;
+  distanceInch = duration*0.0133/2;
+  Serial.println(distanceCm);
+  if(distanceCm >=30)
+  {
+    c2= analogRead(pot); 
+    c1= 1024-c2;         // subtracts c2 from 1000 ans saves the result in c1
+    digitalWrite(pwmPin, HIGH); 
+    delayMicroseconds(c1);   
+    digitalWrite(pwmPin, LOW);  
+    delayMicroseconds(c2); 
+  }
+  else if(distanceCm <=30){
+    digitalWrite(pwmPin, LOW);}
+  
+  
+  
+
+}
